@@ -1,0 +1,10 @@
+runtime: python39  # Even for static sites, a runtime is required
+
+handlers:
+- url: /
+  static_files: static/index.html  # ✅ Path to index.html
+  upload: static/index.html
+
+- url: /(.*)
+  static_files: static/\1  # ✅ Serve all files from 'static' folder
+  upload: static/(.*)
