@@ -81,6 +81,15 @@
         #retryQuiz:hover {
             background-color: #e0a800;
         }
+        /* New styles for the name input and message container */
+        #userName {
+            margin-bottom: 15px;
+        }
+        #submitMessage {
+            margin-top: 15px;
+            font-size: 1rem;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -95,7 +104,7 @@
                         Main
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="index.html">
+                        <a class="sidebar-link" href="index2.html">
                             <i class="align-middle" data-feather="home"></i> <span class="align-middle">Dashboard</span>
                         </a>
                     </li>
@@ -112,6 +121,11 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="profile.html">
                             <i class="align-middle" data-feather="user"></i> <span class="align-middle">Profile</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="settings.html">
+                            <i class="align-middle" data-feather="settings"></i> <span class="align-middle">Settings</span>
                         </a>
                     </li>
                 </ul>
@@ -150,11 +164,20 @@
                             <option value="">Loading categories...</option>
                         </select>
 
+                        <!-- Add a name input field -->
+                        <div class="mb-3">
+                            <label for="userName">Your Name:</label>
+                            <input type="text" id="userName" class="form-control" placeholder="Enter your name">
+                        </div>
+
                         <!-- Generate Quiz Button -->
                         <button id="fetchQuiz">Generate Quiz</button>
                         <div id="quizContainer"></div>
                         <div id="score"></div>
                         <button id="retryQuiz" style="display: none;">Retry Quiz</button>
+
+                        <!-- Add a message container for feedback -->
+                        <div id="submitMessage" class="mt-3"></div>
                     </div>
                 </div>
             </main>
@@ -189,16 +212,13 @@
         </div>
     </div>
 
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
     <script src="js/app.js"></script>
 
     <script>
-        let score = 0;
+        let correctAnswers = 0; // Track the number of correct answers
         let categories = [];
 
-   
         async function fetchCategories() {
             const url = 'https://opentdb.com/api_category.php';
             try {
@@ -231,7 +251,7 @@
             try {
                 const response = await fetch(url);
                 const data = await response.json();
-                score = 0; 
+                correctAnswers = 0; // Reset correct answers
                 document.getElementById('score').innerText = '';
                 document.getElementById('retryQuiz').style.display = 'none';
                 displayQuiz(data.results);
@@ -239,6 +259,7 @@
                 console.error("Error fetching quiz:", error);
             }
         }
+
         function displayQuiz(questions) {
             const quizContainer = document.getElementById('quizContainer');
             quizContainer.innerHTML = '';
@@ -270,12 +291,56 @@
             });
 
             if (button.innerText === correctAnswer) {
-                score++;
+                correctAnswers++; // Increment correct answers
             }
 
-            document.getElementById('score').innerText = `Score: ${score} / 5`;
+            document.getElementById('score').innerText = `Score: ${correctAnswers} / 5`;
+
+            // Check if all questions are answered
             if (document.querySelectorAll('.question').length === document.querySelectorAll('.answer-btn:disabled').length / 4) {
                 document.getElementById('retryQuiz').style.display = 'block';
+
+                // Submit the score when the quiz is completed
+                const userName = document.getElementById('userName').value || "Anonymous"; // Default to "Anonymous" if no name is entered
+                const totalScore = correctAnswers; // Total correct answers
+                const totalQuizzes = 5; // Total number of questions
+
+                submitScore(userName, totalScore, totalQuizzes);
+            }
+        }
+
+        async function submitScore(name, score, quizzes) {
+            const messageElement = document.getElementById('submitMessage');
+            try {
+                const response = await fetch('https://my-backend-432951353144.asia-south1.run.app/api/leaderboard', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name, score, quizzes }),
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json(); // Parse the error response
+                    throw new Error(errorData.error || 'Failed to submit score');
+                }
+
+                const data = await response.json();
+                console.log('Score submitted:', data);
+
+                // Display success message
+                if (messageElement) {
+                    messageElement.textContent = 'Score submitted successfully!';
+                    messageElement.style.color = 'green';
+                }
+            } catch (error) {
+                console.error('Error submitting score:', error);
+
+                // Display error message
+                if (messageElement) {
+                    messageElement.textContent = error.message || 'Failed to submit score. Please try again.';
+                    messageElement.style.color = 'red';
+                }
             }
         }
 

@@ -30,31 +30,7 @@
 
 <body class="login-page">
 
-  <header id="header" class="header d-flex align-items-center sticky-top">
-    <div class="header-container container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
-
-      <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
-        <h1 class="sitename">QuizHub</h1>
-      </a>
-
-      <nav id="navmenu" class="navmenu">
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-      </nav>
-
-      <div class="header-social-links">
-        <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
-        <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-        <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-        <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
-      </div>
-
-    </div>
-  </header>
+  
 
   <main class="main">
 
@@ -71,33 +47,26 @@
 
                 <h2 class="text-center mb-4">Login to QuizHub</h2>
 
-                <form action="login.php" method="post" class="php-email-form">
+                <form id="loginForm" class="php-email-form" >
                   <div class="row gy-4">
-
                     <div class="col-12">
-                      <input type="email" class="form-control" name="email" placeholder="Your Email" required="">
+                      <input type="email" class="form-control" name="email" placeholder="Your Email" required>
                     </div>
-
                     <div class="col-12">
-                      <input type="password" class="form-control" name="password" placeholder="Your Password" required="">
+                      <input type="password" class="form-control" name="password" placeholder="Your Password" required>
                     </div>
-
                     <div class="col-12 text-center">
                       <div class="loading">Loading</div>
                       <div class="error-message"></div>
                       <div class="sent-message">Login successful! Redirecting...</div>
-
                       <button type="submit" class="btn btn-submit w-100">Login</button>
                     </div>
-
                     <div class="col-12 text-center mt-3">
                       <a href="#" class="forgot-password">Forgot Password?</a>
                     </div>
-
                     <div class="col-12 text-center mt-3">
                       <p class="mb-0">Don't have an account? <a href="register.html">Sign Up</a></p>
                     </div>
-
                   </div>
                 </form>
 
@@ -146,6 +115,21 @@
   <script src="vendor/swiper/swiper-bundle.min.js"></script>
 
   <!-- Main JS File -->
+   
+
+
+ <script>
+  
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent default form submission
+    
+    // Redirect to IAP's authentication endpoint
+    const currentUrl = encodeURIComponent(window.location.href);
+    window.location.href = `/_gcp_iap/authenticate?redirect_uri=${currentUrl}`;
+});
+</script>
+</script>
+   </script>
   <script src="js/main.js"></script>
 
 </body>

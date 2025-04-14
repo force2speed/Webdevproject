@@ -1,36 +1,32 @@
 <?php
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST");
+header("Content-Type: application/json");
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Your existing code...
-?>
-<?php
-// login.php
-
-// Start the session
 session_start();
 
-// Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve form data
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
 
-    // Validate credentials (this is a basic example; use proper validation and database checks in production)
+    // Debug: Log received data
+    error_log("Email: $email, Password: $password");
+
+    // Hardcoded validation (replace with database check)
     $valid_email = "user@example.com";
     $valid_password = "password123";
 
     if ($email === $valid_email && $password === $valid_password) {
-        // Set session variables
         $_SESSION['loggedin'] = true;
         $_SESSION['email'] = $email;
-
-        // Redirect to a dashboard or home page
-        header("Location: index2.html");
-        exit;
+        echo json_encode(['status' => 'success', 'message' => 'Login successful!']);
     } else {
-        // Invalid credentials
-        echo "Invalid email or password.";
+        echo json_encode(['status' => 'error', 'message' => 'Invalid email or password.']);
     }
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'Invalid request method.']);
 }
 ?>

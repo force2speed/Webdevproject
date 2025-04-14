@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="QuizHub - Online Quiz Platform with Leaderboard">
+    <meta name="author" content="QuizHub Team">
+    <meta name="keywords" content="quizhub, online quiz, quiz platform, leaderboard, quizzes, learning">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
+
+    <link rel="canonical" href="https://quizhub.com/" />
+
+    <title>QuizHub - Leaderboard</title>
+
+    <link href="css/app.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <nav id="sidebar" class="sidebar js-sidebar">
+            <div class="sidebar-content js-simplebar">
+                <a class="sidebar-brand" href="index.html">
+                    <span class="align-middle">QuizHub</span>
+                </a>
+
+                <ul class="sidebar-nav">
+                    <li class="sidebar-header">
+                        Main
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="index2.html">
+                            <i class="align-middle" data-feather="home"></i> <span class="align-middle">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="quizzes.html">
+                            <i class="align-middle" data-feather="book"></i> <span class="align-middle">Quizzes</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item active">
+                        <a class="sidebar-link" href="leaderboard.html">
+                            <i class="align-middle" data-feather="award"></i> <span class="align-middle">Leaderboard</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="profile.html">
+                            <i class="align-middle" data-feather="user"></i> <span class="align-middle">Profile</span>
+                        </a>
+                    </li>
+
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="settings.html">
+                            <i class="align-middle" data-feather="settings"></i> <span class="align-middle">Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="main">
+            <nav class="navbar navbar-expand navbar-light navbar-bg">
+                <a class="sidebar-toggle js-sidebar-toggle">
+                    <i class="hamburger align-self-center"></i>
+                </a>
+
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav navbar-align">
+                        <li class="nav-item dropdown">
+                            <a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
+                                <div class="position-relative">
+                                    <i class="align-middle" data-feather="bell"></i>
+                                    <span class="indicator">4</span>
+                                </div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
+                                <div class="dropdown-menu-header">
+                                    4 New Notifications
+                                </div>
+                                <div class="list-group">
+                                    <a href="#" class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col-2">
+                                                <i class="text-danger" data-feather="alert-circle"></i>
+                                            </div>
+                                            <div class="col-10">
+                                                <div class="text-dark">New Quiz Available</div>
+                                                <div class="text-muted small mt-1">Check out the latest quiz on JavaScript.</div>
+                                                <div class="text-muted small mt-1">30m ago</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="list-group-item">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col-2">
+                                                <i class="text-warning" data-feather="bell"></i>
+                                            </div>
+                                            <div class="col-10">
+                                                <div class="text-dark">Leaderboard Update</div>
+                                                <div class="text-muted small mt-1">Your rank has improved!</div>
+                                                <div class="text-muted small mt-1">2h ago</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="dropdown-menu-footer">
+                                    <a href="#" class="text-muted">Show all notifications</a>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+                                <img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1" alt="User Avatar" /> <span class="text-dark">shresth kumar gupta</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="profile.html"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
+                                <a class="dropdown-item" href="settings.html"><i class="align-middle me-1" data-feather="settings"></i> Settings</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Log out</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main class="content">
+                <div class="container-fluid p-0">
+                    <h1 class="h3 mb-3"><strong>QuizHub</strong> Leaderboard</h1>
+
+                    <!-- Bar Chart Leaderboard -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Top 5 Players</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="leaderboardChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Global Leaderboard Table -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Global Leaderboard</h5>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-hover my-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Rank</th>
+                                                <th>Name</th>
+                                                <th>Score</th>
+                                                <th>Quizzes Taken</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="leaderboard-table-body">
+                                            <!-- Leaderboard data will be dynamically populated -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Friends Leaderboard Table -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Friends Leaderboard</h5>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-hover my-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Rank</th>
+                                                <th>Name</th>
+                                                <th>Score</th>
+                                                <th>Quizzes Taken</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>Alice Johnson</td>
+                                                <td>890</td>
+                                                <td>40</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>Bob Brown</td>
+                                                <td>870</td>
+                                                <td>38</td>
+                                            </tr>
+                                            <!-- More friends data here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row text-muted">
+                        <div class="col-6 text-start">
+                            <p class="mb-0">
+                                <a class="text-muted" href="https://quizhub.com/" target="_blank"><strong>QuizHub</strong></a> &copy;
+                            </p>
+                        </div>
+                        <div class="col-6 text-end">
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <a class="text-muted" href="https://quizhub.com/" target="_blank">Support</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a class="text-muted" href="https://quizhub.com/" target="_blank">Help Center</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a class="text-muted" href="https://quizhub.com/" target="_blank">Privacy</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a class="text-muted" href="https://quizhub.com/" target="_blank">Terms</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+    try {
+        const response = await fetch('https://my-backend-432951353144.asia-south1.run.app/api/leaderboard'); // Updated endpoint
+        if (!response.ok) throw new Error('Failed to fetch leaderboard data');
+        const leaderboardData = await response.json();
+
+        // Populate table and chart
+        const tableBody = document.getElementById("leaderboard-table-body");
+        tableBody.innerHTML = "";
+        leaderboardData.forEach(player => {
+            const row = `
+                <tr>
+                    <td>${player.rank}</td>
+                    <td>${player.name}</td>
+                    <td>${player.score}</td>
+                    <td>${player.quizzes}</td>
+                </tr>
+            `;
+            tableBody.innerHTML += row;
+        });
+
+        // Extract top 5 players for the chart
+        const top5 = leaderboardData.slice(0, 5);
+        const names = top5.map(player => player.name);
+        const scores = top5.map(player => player.score);
+
+        // Bar Chart using Chart.js
+        const ctx = document.getElementById("leaderboardChart").getContext("2d");
+        new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: names,
+                datasets: [{
+                    label: "Score",
+                    data: scores,
+                    backgroundColor: ["#3498db", "#1abc9c", "#f39c12", "#e74c3c", "#9b59b6"],
+                    borderColor: "#2c3e50",
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: (context) => {
+                                const player = top5[context.dataIndex];
+                                return `${player.name}: ${player.score} points (${player.quizzes} quizzes)`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    } catch (error) {
+        console.error("Error fetching leaderboard data:", error);
+        alert("Failed to load leaderboard. Please try again later.");
+    }
+});
+    </script>
+
+</body>
+</html>
