@@ -38,9 +38,6 @@
 							<i class="align-middle" data-feather="home"></i> <span class="align-middle">Dashboard</span>
 						</a>
 					</li>
-
-					
-
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="quizzes.html">
 							<i class="align-middle" data-feather="book"></i> <span class="align-middle">Quizzes</span>
@@ -58,7 +55,6 @@
 						</a>
 					</li>
 
-				
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="settings.html">
 							<i class="align-middle" data-feather="settings"></i> <span class="align-middle">Settings</span>
@@ -100,18 +96,6 @@
 											</div>
 										</div>
 									</a>
-									<a href="#" class="list-group-item">
-										<div class="row g-0 align-items-center">
-											<div class="col-2">
-												<i class="text-warning" data-feather="bell"></i>
-											</div>
-											<div class="col-10">
-												<div class="text-dark">Leaderboard Update</div>
-												<div class="text-muted small mt-1">Your rank has improved!</div>
-												<div class="text-muted small mt-1">2h ago</div>
-											</div>
-										</div>
-									</a>
 								</div>
 								<div class="dropdown-menu-footer">
 									<a href="#" class="text-muted">Show all notifications</a>
@@ -121,7 +105,7 @@
 
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-								<img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1" alt="User Avatar" /> <span class="text-dark">John Doe</span>
+								<img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1" alt="User Avatar" /> <span class="text-dark welcome-msg"></span>
 							</a>
 							<div class="dropdown-menu dropdown-menu-end">
 								<a class="dropdown-item" href="profile.html"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
@@ -136,10 +120,10 @@
 
 			<main class="content">
 				<div class="container-fluid p-0">
-
 					<div class="mb-3">
 						<h1 class="h3 d-inline align-middle">Profile</h1>
 					</div>
+
 					<div class="row">
 						<div class="col-md-4 col-xl-3">
 							<div class="card mb-3">
@@ -148,7 +132,7 @@
 								</div>
 								<div class="card-body text-center">
 									<img src="img/avatars/avatar-4.jpg" alt="John Doe" class="img-fluid rounded-circle mb-2" width="128" height="128" />
-									<h5 class="card-title mb-0">John Doe</h5>
+									<h5 class="card-title mb-0 welcome-msg"></h5>
 									<div class="text-muted mb-2">Quiz Enthusiast</div>
 
 									<div>
@@ -175,10 +159,8 @@
 								<hr class="my-0" />
 								<div class="card-body">
 									<h5 class="h6 card-title">Stats</h5>
-									<ul class="list-unstyled mb-0">
-										<li class="mb-1"><span data-feather="check-circle" class="feather-sm me-1"></span> Quizzes Taken: <strong>45</strong></li>
-										<li class="mb-1"><span data-feather="star" class="feather-sm me-1"></span> Average Score: <strong>85%</strong></li>
-										<li class="mb-1"><span data-feather="trending-up" class="feather-sm me-1"></span> Current Streak: <strong>7 days</strong></li>
+									<ul class="list-unstyled mb-0" id="userStats">
+										<!-- Stats will be inserted here dynamically -->
 									</ul>
 								</div>
 							</div>
@@ -189,47 +171,8 @@
 								<div class="card-header">
 									<h5 class="card-title mb-0">Recent Activities</h5>
 								</div>
-								<div class="card-body h-100">
-
-									<div class="d-flex align-items-start">
-										<img src="img/avatars/avatar-5.jpg" width="36" height="36" class="rounded-circle me-2" alt="Vanessa Tucker">
-										<div class="flex-grow-1">
-											<small class="float-end text-navy">5m ago</small>
-											<strong>Vanessa Tucker</strong> completed the <strong>JavaScript Basics</strong> quiz<br />
-											<small class="text-muted">Scored 92%</small><br />
-										</div>
-									</div>
-
-									<hr />
-									<div class="d-flex align-items-start">
-										<img src="img/avatars/avatar.jpg" width="36" height="36" class="rounded-circle me-2" alt="Charles Hall">
-										<div class="flex-grow-1">
-											<small class="float-end text-navy">30m ago</small>
-											<strong>Charles Hall</strong> shared a quiz result<br />
-											<small class="text-muted">Scored 78% on Advanced CSS</small>
-
-											<div class="border text-sm text-muted p-2 mt-1">
-												"Great quiz! Learned a lot about CSS animations."
-											</div>
-
-											<a href="#" class="btn btn-sm btn-danger mt-1"><i class="feather-sm" data-feather="heart"></i> Like</a>
-										</div>
-									</div>
-
-									<hr />
-									<div class="d-flex align-items-start">
-										<img src="img/avatars/avatar-4.jpg" width="36" height="36" class="rounded-circle me-2" alt="John Doe">
-										<div class="flex-grow-1">
-											<small class="float-end text-navy">1h ago</small>
-											<strong>John Doe</strong> achieved a new high score on <strong>Python Fundamentals</strong><br />
-											<small class="text-muted">Scored 95%</small>
-										</div>
-									</div>
-
-									<hr />
-									<div class="d-grid">
-										<a href="#" class="btn btn-primary">Load more</a>
-									</div>
+								<div class="card-body h-100" id="recentActivities">
+									<!-- Activities will be inserted dynamically -->
 								</div>
 							</div>
 						</div>
@@ -268,8 +211,48 @@
 		</div>
 	</div>
 
-	<script src="js/app.js"></script>
+	<script>
+		// Assuming data comes from local storage or an API
+		const user = JSON.parse(localStorage.getItem("quizhub_user"));
 
+		if (user && user.username) {
+			console.log("Welcome,", user.username);
+
+			// Update welcome message
+			const welcomeEls = document.getElementsByClassName("welcome-msg");
+			for (let el of welcomeEls) {
+				el.textContent = user.username;
+			}
+
+			// Update stats and activities dynamically
+			const userStats = document.getElementById("userStats");
+			userStats.innerHTML = `
+				<li class="mb-1"><span data-feather="check-circle" class="feather-sm me-1"></span> Quizzes Taken: <strong>${user.stats.quizzesTaken}</strong></li>
+				<li class="mb-1"><span data-feather="star" class="feather-sm me-1"></span> Average Score: <strong>${user.stats.averageScore}%</strong></li>
+				<li class="mb-1"><span data-feather="trending-up" class="feather-sm me-1"></span> Current Streak: <strong>${user.stats.currentStreak} days</strong></li>
+			`;
+
+			// Render recent activities
+			const recentActivities = document.getElementById("recentActivities");
+			user.recentActivities.forEach(activity => {
+				recentActivities.innerHTML += `
+					<div class="d-flex align-items-start">
+						<img src="${activity.userImage}" width="36" height="36" class="rounded-circle me-2" alt="${activity.userName}">
+						<div class="flex-grow-1">
+							<small class="float-end text-navy">${activity.timeAgo}</small>
+							<strong>${activity.userName}</strong> ${activity.action}<br />
+							<small class="text-muted">${activity.scoreText}</small><br />
+						</div>
+					</div>
+					<hr />
+				`;
+			});
+		} else {
+			// Not logged in? Redirect to login page
+			window.location.href = "login.html";
+		}
+	</script>
+	<script src="js/app.js"></script>
 </body>
 
 </html>
