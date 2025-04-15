@@ -1,48 +1,38 @@
-
-// server.js
 const express = require('express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 const cors = require('cors');
+const authController = require('./controllers/authController');
+const leaderboardRoutes = require('./routes/leaderboard');
+
+// Load .env variables
+dotenv.config({ path: './config.env' });
+
 const app = express();
 
-app.use(cors());
+// Middlewares
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type'],
+}));
 app.use(express.json());
 
-// Mock leaderboard data
-const leaderboardData = [
-    { rank: 1, name: "Dhruv Dhoundiyal", score: 950, quizzes: 45 },
-    { rank: 2, name: "Jane Smith", score: 920, quizzes: 42 },
-    { rank: 3, name: "Alex Turner", score: 900, quizzes: 41 },
-    { rank: 4, name: "Emily Davis", score: 880, quizzes: 39 },
-    { rank: 5, name: "Michael Johnson", score: 860, quizzes: 37 },
-];
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log("✅ Connected to MongoDB"))
+.catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// Leaderboard API endpoint
-app.get('/api/leaderboard', (req, res) => {
-    res.json(leaderboardData);
-});
-app.post('/api/leaderboard', (req, res) => {
-    const { name, score, quizzes } = req.body;
+// Routes
+app.post('/api/signup', authController.signup);
+app.post('/api/login', authController.login);
+app.use('/api/leaderboard', leaderboardRoutes);
 
-    // Validate input
-    if (!name || typeof score !== 'number' || typeof quizzes !== 'number') {
-        return res.status(400).json({ error: 'Invalid input: name, score, and quizzes are required, and score/quizzes must be numbers' });
-    }
-
-    // Add the new score to the leaderboard
-    leaderboardData.push({ rank: leaderboardData.length + 1, name, score, quizzes });
-
-    // Sort the leaderboard by score (descending)
-    leaderboardData.sort((a, b) => b.score - a.score);
-
-    // Update ranks
-    leaderboardData.forEach((player, index) => {
-        player.rank = index + 1;
-    });
-
-    res.status(201).json({ message: 'Score added successfully', leaderboard: leaderboardData });
-});
+// Server start
 const PORT = process.env.PORT || 8080;
-
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
