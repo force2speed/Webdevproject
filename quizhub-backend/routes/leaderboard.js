@@ -1,47 +1,91 @@
-const express = require("express");
+const express = require('express');
+const Leaderboard = require('../models/leaderboard');
 const router = express.Router();
-const Leaderboard = require("../models/Leaderboard");
 
-// Get all leaderboard data (sorted by score descending)
-router.get("/", async (req, res) => {
-  try {
-    const data = await Leaderboard.find().sort({ score: -1 });
+// Handle score submissions
+router.post('/', async (req, res) => {
+    try {
+        const { name, score, quizzes, perfectQuiz, percentage } = req.body;
+        
+        // Find the user's most recent record (regardless of date)
+        const userRecord = await Leaderboard.findOne({ name })
+            .sort({ timestamp: -1 }) // Get the most recent record
+            .exec();
 
-    const rankedData = data.map((player, index) => ({
-      rank: index + 1,
-      name: player.name,
-      score: player.score,
-      quizzes: player.quizzes
-    }));
-
-    res.json(rankedData);
-  } catch (err) {
-    res.status(500).json({ error: "Failed to load leaderboard data" });
-  }
+        if (userRecord) {
+            // Update the existing user's total quizzes count
+            userRecord.totalQuizzesAttempted += 1;
+            
+            // Create a new entry for this attempt
+            const newEntry = new Leaderboard({
+                name,
+                score: userRecord.score + score,
+                quizzes: userRecord.quizzes + quizzes,
+                perfectQuiz: userRecord.perfectQuiz || perfectQuiz,
+                percentage: Math.max(userRecord.percentage, percentage),
+                totalQuizzesAttempted: userRecord.totalQuizzesAttempted
+            });
+            
+            await newEntry.save();
+            res.status(200).json({
+                message: "Score added and total quizzes updated",
+                user: newEntry
+            });
+        } else {
+            // First time user - create new record
+            const newEntry = new Leaderboard({
+                name,
+                score,
+                quizzes,
+                perfectQuiz,
+                percentage,
+                totalQuizzesAttempted: 1
+            });
+            
+            await newEntry.save();
+            res.status(201).json({
+                message: "New user record created",
+                user: newEntry
+            });
+        }
+    } catch (err) {
+        console.error("Error saving score:", err);
+        res.status(500).json({ 
+            message: "Failed to save score",
+            error: err.message 
+        });
+    }
 });
 
-// Add/update a player's score
-router.post("/", async (req, res) => {
-  const { name, score, quizzes } = req.body;
-
-  try {
-    let player = await Leaderboard.findOne({ name });
-
-    if (player) {
-      // Update if existing
-      player.score = score;
-      player.quizzes = quizzes;
-      await player.save();
-    } else {
-      // Create new
-      player = new Leaderboard({ name, score, quizzes });
-      await player.save();
+// Get leaderboard data
+router.get('/', async (req, res) => {
+    try {
+        // Get the latest record for each user
+        const leaderboard = await Leaderboard.aggregate([
+            {
+                $sort: { timestamp: -1 }
+            },
+            {
+                $group: {
+                    _id: "$name",
+                    doc: { $first: "$$ROOT" }
+                }
+            },
+            {
+                $replaceRoot: { newRoot: "$doc" }
+            },
+            {
+                $sort: { score: -1 }
+            },
+            {
+                $limit: 100
+            }
+        ]);
+        
+        res.json(leaderboard);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
-
-    res.status(200).json({ message: "Leaderboard updated" });
-  } catch (err) {
-    res.status(500).json({ error: "Failed to update leaderboard" });
-  }
 });
 
 module.exports = router;
