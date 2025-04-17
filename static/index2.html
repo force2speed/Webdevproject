@@ -102,7 +102,7 @@
                 >
                   <div class="dropdown-menu-header">4 New Notifications</div>
                   <div class="list-group">
-                    <a href="quizzes.html" class="list-group-item">
+                    <a href="#" class="list-group-item">
                       <div class="row g-0 align-items-center">
                         <div class="col-2">
                           <i
@@ -119,7 +119,7 @@
                         </div>
                       </div>
                     </a>
-                    <a  class="list-group-item">
+                    <a href="#" class="list-group-item">
                       <div class="row g-0 align-items-center">
                         <div class="col-2">
                           <i class="text-warning" data-feather="bell"></i>
@@ -172,7 +172,7 @@
 
         <main class="content">
           <div class="container-fluid p-0">
-            <h1 class="h3 mb-3" style="text-align: center;"><strong>QuizHub</strong> Dashboard</h1>
+            <h1 class="h3 mb-3"><strong>QuizHub</strong> Dashboard</h1>
 
             <div class="row">
               <div class="col-xl-6 col-xxl-5 d-flex">
@@ -280,9 +280,17 @@
                 </div>
               </div>
 
-              <div class="col-xl-6 col-xxl-7">
+         
                 <div class="card flex-fill w-100">
                  
+                  <div class="card-body py-3">
+                    <table class="table table-hover my-0">
+                   
+                      <tbody id="leaderboard-body">
+                        <!-- Leaderboard data will be inserted here dynamically -->
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
@@ -291,8 +299,9 @@
         </main>
         <main class="content">
           <div class="container-fluid p-0">
-              <h1 class="h3 mb-3" style="text-align: center;"><strong>QuizHub</strong> Leaderboard</h1>
+              <h1 class="h3 mb-3"><strong>QuizHub</strong> Leaderboard</h1>
 
+              <!-- Bar Chart Leaderboard -->
               <div class="row">
                   <div class="col-12">
                       <div class="card">
@@ -306,6 +315,7 @@
                   </div>
               </div>
 
+              <!-- Global Leaderboard Table -->
               <div class="row">
                   <div class="col-12">
                       <div class="card">
@@ -332,6 +342,8 @@
                       </div>
                   </div>
               </div>
+
+              <!-- Friends Leaderboard Table -->
               <div class="row">
                   <div class="col-12">
                       <div class="card">
@@ -361,6 +373,7 @@
                                           <td>870</td>
                                           <td>38</td>
                                       </tr>
+                                      <!-- More friends data here -->
                                   </tbody>
                               </table>
                           </div>
@@ -368,6 +381,7 @@
                   </div>
               </div>
           </div>
+          <!-- User Stats Card -->
 
       </main>
 
@@ -452,10 +466,45 @@
           window.location.href = "loginpage.html";
         });
     
-       
+        async function fetchDashboardData() {
+          try {
+            const leaderboardResponse = await fetch('http://localhost:8080/api/leaderboard');
+            if (!leaderboardResponse.ok) throw new Error(`Error: ${leaderboardResponse.status}`);
+            const leaderboardData = await leaderboardResponse.json();
+    
+            const leaderboardBody = document.getElementById("leaderboard-body");
+            leaderboardBody.innerHTML = "";
+    
+            let userFound = false;
+    
+            leaderboardData.sort((a, b) => b.score - a.score);
+    
+            leaderboardData.forEach((player, index) => {
+              const row = document.createElement("tr");
+              row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${player.name || 'Anonymous'}</td>
+                <td>${player.score || 0}</td>
+                <td>${player.totalQuizzesAttempted || 0}</td>
+              `;
+              
+    
+              if (!userFound && player.name === user.username) {
+                userFound = true;
+                document.getElementById("user-rank").textContent = `#${index + 1}`;
+                document.getElementById("quizzes-taken").textContent = player.totalQuizzesAttempted || 0;
+                document.getElementById("user-score").textContent = player.score || 0;
+                document.getElementById("user-percentage").textContent = player.percentage + "%" || "0%";
+                document.getElementById("perfect-quiz").textContent = player.perfectQuiz ? "Yes" : "No";
+              }
+            });
+          } catch (err) {
+            console.error("Failed to fetch leaderboard:", err);
+          }
         }
     
-      );
+        fetchDashboardData();
+      });
     </script>
     
     <script>
@@ -468,6 +517,8 @@
               if (!response.ok) {
                   throw new Error(`HTTP error! Status: ${response.status}`);
               }
+              
+              // Parse the response - this is now an array directly
               const players = await response.json();
               console.log("Received players:", players);
               
@@ -475,6 +526,7 @@
                   throw new Error("Expected an array of players");
               }
       
+              // Populate the table
               const tableBody = document.getElementById("leaderboard-table-body");
               tableBody.innerHTML = "";
               
@@ -492,6 +544,7 @@
                   tableBody.innerHTML += row;
               });
       
+              // Create chart with top 5 players
               if (players.length > 0) {
                   const top5 = players.slice(0, 5);
                   const ctx = document.getElementById("leaderboardChart").getContext("2d");
