@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
                 score: userRecord.score + score,
                 quizzes: userRecord.quizzes + quizzes,
                 perfectQuiz: userRecord.perfectQuiz || perfectQuiz,
-                percentage: Math.max(userRecord.percentage, percentage),
+                percentage: (userRecord.score/userRecord.quizzes)*100,
                 totalQuizzesAttempted: userRecord.totalQuizzesAttempted
             });
             

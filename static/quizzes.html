@@ -259,11 +259,7 @@
                             <i class="align-middle" data-feather="book"></i> <span class="align-middle">Quizzes</span>
                         </a>
                     </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="leaderboard.html">
-                            <i class="align-middle" data-feather="award"></i> <span class="align-middle">Leaderboard</span>
-                        </a>
-                    </li>
+                 
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="profile.html">
                             <i class="align-middle" data-feather="user"></i> <span class="align-middle">Profile</span>
@@ -334,7 +330,6 @@
                 <div class="container-fluid p-0">
                     <h1 class="h3 mb-3">Quizzes</h1>
                     <div class="quiz-container">
-                        <!-- Quiz Settings -->
                         <div class="form-group">
                             <label for="category" class="form-label">Select Category:</label>
                             <select id="category" class="form-select">
@@ -361,15 +356,12 @@
                                 <option value="hard">Hard</option>
                             </select>
                         </div>
-
-                        <!-- Generate Quiz Button -->
                         <div class="points-info">
                             Points System: Easy (1pt), Medium (2pts), Hard (3pts)<br>
                             Perfect Quiz Bonus: 2x base points
                         </div>
                         <button id="fetchQuiz" class="btn btn-primary">Generate Quiz</button>
-                        
-                        <!-- Quiz Header with Timer -->
+                    
                         <div id="quizHeader" style="display: none;">
                             <div class="progress-container">
                                 <div id="progressBar" class="progress-bar" style="width: 0%"></div>
@@ -385,7 +377,6 @@
                         
                         <div id="quizContainer"></div>
                         
-                        <!-- Score Display -->
                         <div id="score" class="score-display" style="display: none;">
                             <div class="base-points">Correct Answers: <span id="correctCount">0</span>/<span id="totalQuestions">0</span></div>
                             <div class="base-points">Base Points: <span id="baseScore">0</span></div>
@@ -436,7 +427,6 @@
     <script src="js/app.js"></script>
 
     <script>
-        // Quiz variables
         let correctAnswers = 0;
         let categories = [];
         let timerInterval;
@@ -450,8 +440,6 @@
         let totalQuizTime = 0;
         let userAnswers = {};
         let quizQuestions = [];
-
-        // Points configuration
         const POINTS_SYSTEM = {
             easy: 1,
             medium: 2,
@@ -470,11 +458,10 @@
         const progressBar = document.getElementById('progressBar');
         const submitQuizBtn = document.getElementById('submitQuiz');
 
-        // Initialize the page
         document.addEventListener('DOMContentLoaded', () => {
+            
             fetchCategories();
             
-            // Set up event listeners
             document.getElementById('fetchQuiz').addEventListener('click', startQuiz);
             document.getElementById('retryQuiz').addEventListener('click', startQuiz);
             enterFullscreenBtn.addEventListener('click', requestFullscreen);
@@ -482,17 +469,22 @@
                 tabSwitchWarning.style.display = 'none';
             });
             submitQuizBtn.addEventListener('click', submitQuiz);
-
-            // Check if user is logged in
             const user = JSON.parse(localStorage.getItem("quizhub_user"));
             if (user && user.username) {
                 document.getElementById("welcome-msg").textContent = user.username;
             } else {
                 window.location.href = "login.html";
             }
+            document.getElementById("logout-btn").addEventListener("click", function (e) {
+    e.preventDefault();     
+    
+    localStorage.removeItem("quizhub_user");
+    
+    window.location.href = "login.html";
+    
+  
+  });
         });
-
-        // Fullscreen functions
         function requestFullscreen() {
             const elem = document.documentElement;
             if (elem.requestFullscreen) {
@@ -506,7 +498,6 @@
             }
         }
 
-        // Handle fullscreen change events
         document.addEventListener('fullscreenchange', handleFullscreenChange);
         document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
         document.addEventListener('msfullscreenchange', handleFullscreenChange);
@@ -521,7 +512,6 @@
             }
         }
 
-        // Quiz functions
         async function fetchCategories() {
             const url = 'https://opentdb.com/api_category.php';
             try {
@@ -544,7 +534,6 @@
         }
 
         function startQuiz() {
-            // Check if fullscreen is enabled
             if (!fullscreenEnabled) {
                 fullscreenWarning.style.display = 'flex';
                 return;
@@ -556,33 +545,24 @@
                 return;
             }
             
-            // Reset counters and flags
             tabSwitchCount = 0;
             quizInProgress = true;
             correctAnswers = 0;
             questionsAnswered = 0;
             userAnswers = {};
             
-            // Set up tab switching detection
             document.addEventListener('visibilitychange', handleVisibilityChange);
-            
-            // Get quiz settings
             totalQuestions = parseInt(document.getElementById('questionCount').value);
             const difficulty = document.getElementById('difficulty').value;
-            totalQuizTime = totalQuestions * 30; // 30 seconds per question
-            
-            // Clear previous quiz
+            totalQuizTime = totalQuestions * 30; 
             document.getElementById('score').style.display = 'none';
             document.getElementById('retryQuiz').style.display = 'none';
             document.getElementById('submitMessage').textContent = '';
             quizHeader.style.display = 'block';
             submitQuizBtn.style.display = 'inline-block';
             submitQuizBtn.disabled = true;
-            
-            // Start timer
+        
             startTimer(totalQuizTime);
-            
-            // Fetch quiz questions
             fetchQuizQuestions(categoryId, totalQuestions, difficulty);
         }
 
@@ -616,7 +596,6 @@
 
             questions.forEach((q, index) => {
                 const answers = [...q.incorrect_answers, q.correct_answer];
-                // Shuffle answers using Fisher-Yates algorithm
                 for (let i = answers.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
                     [answers[i], answers[j]] = [answers[j], answers[i]];
@@ -638,24 +617,18 @@
         }
 
         function selectAnswer(button, correctAnswer, questionIndex) {
-            // Deselect all answers for this question
             const questionDiv = button.closest('.question');
             const buttons = questionDiv.querySelectorAll('.answer-btn');
             buttons.forEach(btn => {
                 btn.classList.remove('selected');
             });
-            
-            // Select the clicked answer
             button.classList.add('selected');
-            
-            // Store the user's answer
             userAnswers[questionIndex] = {
                 selected: button.innerText,
                 correct: decodeHtmlEntities(button.innerText) === decodeHtmlEntities(correctAnswer),
                 difficulty: quizQuestions[questionIndex].difficulty
             };
             
-            // Update progress
             updateProgressBar();
         }
 
@@ -663,13 +636,10 @@
             const answeredCount = Object.keys(userAnswers).length;
             const progress = (answeredCount / totalQuestions) * 100;
             progressBar.style.width = `${progress}%`;
-            
-            // Enable submit button if all questions are answered
             submitQuizBtn.disabled = answeredCount < totalQuestions;
         }
 
         function submitQuiz() {
-            // Calculate base score
             let baseScore = 0;
             let perfectQuiz = true;
          
@@ -686,27 +656,21 @@
                 
             
             });
-            
-            // Calculate bonus for perfect quiz
             let bonusScore = 0;
             if (perfectQuiz) {
-                bonusScore = baseScore * (PERFECT_QUIZ_BONUS_MULTIPLIER - 1); // Bonus is equal to base score (so total is 2x)
+                bonusScore = baseScore * (PERFECT_QUIZ_BONUS_MULTIPLIER - 1); 
                 document.getElementById('bonusContainer').style.display = 'block';
             } else {
                 document.getElementById('bonusContainer').style.display = 'none';
             }
             
             const totalScore = baseScore + bonusScore;
-            
-            // Display scores
             document.getElementById('correctCount').textContent = Object.values(userAnswers).filter(a => a.correct).length;
             document.getElementById('totalQuestions').textContent = totalQuestions;
             document.getElementById('baseScore').textContent = baseScore;
             document.getElementById('bonusScore').textContent = bonusScore;
             document.getElementById('totalScore').textContent = totalScore;
             document.getElementById('score').style.display = 'block';
-            
-            // Show correct/incorrect answers
             document.querySelectorAll('.question').forEach((question, index) => {
                 const buttons = question.querySelectorAll('.answer-btn');
                 const correctAnswer = quizQuestions[index].correct_answer;
@@ -724,15 +688,11 @@
             document.getElementById('retryQuiz').style.display = 'block';
             submitQuizBtn.style.display = 'none';
             endQuiz();
-            
-            // Submit score to server
             const userName = localStorage.getItem('quizhub_user') 
                 ? JSON.parse(localStorage.getItem('quizhub_user')).username 
                 : "Anonymous";
             submitScoreToServer(userName, totalScore, totalQuestions, perfectQuiz);
         }
-
-        // Timer functions
         function startTimer(durationInSeconds) {
             clearInterval(timerInterval);
             timeLeft = durationInSeconds;
@@ -769,18 +729,14 @@
         }
 
         function timeUp() {
-            // Automatically submit the quiz if time runs out
             submitQuiz();
             document.getElementById('score').innerText = `Time's up! Final Score: ${correctAnswers} / ${totalQuestions}`;
         }
 
-        // Tab switching detection
         function handleVisibilityChange() {
             if (document.hidden && quizInProgress) {
                 tabSwitchCount++;
                 attemptsRemaining.textContent = maxTabSwitchesAllowed - tabSwitchCount;
-                
-                // Show warning
                 if (tabSwitchCount >= maxTabSwitchesAllowed) {
                     warningMessage.textContent = "You have switched tabs too many times. Your quiz will be submitted automatically.";
                     tabSwitchWarning.style.display = 'flex';
@@ -795,8 +751,6 @@
                 }
             }
         }
-
-        // Quiz ending functions
         function endQuiz() {
             clearInterval(timerInterval);
             quizInProgress = false;
@@ -804,17 +758,12 @@
         }
 
         function endQuizEarly() {
-            // Disable all buttons
             document.querySelectorAll('.answer-btn').forEach(btn => {
                 btn.disabled = true;
             });
-            
-            // Submit with current score
             endQuiz();
             document.getElementById('score').innerText = `Quiz submitted. Final Score: ${correctAnswers} / ${totalQuestions}`;
         }
-
-        // Score submission
         async function submitScoreToServer(name, score, quizzes, perfectQuiz) {
             const messageElement = document.getElementById('submitMessage');
             try {
@@ -847,8 +796,6 @@
                 messageElement.style.color = 'red';
             }
         }
-
-        // Helper functions
         function decodeHtmlEntities(text) {
             const textArea = document.createElement('textarea');
             textArea.innerHTML = text;

@@ -44,11 +44,7 @@
 						</a>
 					</li>
 
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="leaderboard.html">
-							<i class="align-middle" data-feather="award"></i> <span class="align-middle">Leaderboard</span>
-						</a>
-					</li>
+					
 					<li class="sidebar-item active">
 						<a class="sidebar-link" href="profile.html">
 							<i class="align-middle" data-feather="user"></i> <span class="align-middle">Profile</span>
@@ -84,7 +80,7 @@
 									3 New Notifications
 								</div>
 								<div class="list-group">
-									<a href="#" class="list-group-item">
+									<a href="quizzes.html" class="list-group-item">
 										<div class="row g-0 align-items-center">
 											<div class="col-2">
 												<i class="text-danger" data-feather="alert-circle"></i>
@@ -111,7 +107,7 @@
 								<a class="dropdown-item" href="profile.html"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
 								<a class="dropdown-item" href="settings.html"><i class="align-middle me-1" data-feather="settings"></i> Settings</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="#">Log out</a>
+								<a class="dropdown-item" href="#" id="logout-btn">Log out</a>
 							</div>
 						</li>
 					</ul>
@@ -160,7 +156,6 @@
 								<div class="card-body">
 									<h5 class="h6 card-title">Stats</h5>
 									<ul class="list-unstyled mb-0" id="userStats">
-										<!-- Stats will be inserted here dynamically -->
 									</ul>
 								</div>
 							</div>
@@ -172,7 +167,6 @@
 									<h5 class="card-title mb-0">Recent Activities</h5>
 								</div>
 								<div class="card-body h-100" id="recentActivities">
-									<!-- Activities will be inserted dynamically -->
 								</div>
 							</div>
 						</div>
@@ -212,27 +206,29 @@
 	</div>
 
 	<script>
-		// Assuming data comes from local storage or an API
+		document.getElementById("logout-btn").addEventListener("click", function (e) {
+    e.preventDefault(); 
+    localStorage.removeItem("quizhub_user");
+    
+   
+    window.location.href = "loginpage.html";
+    
+   
+  });
 		const user = JSON.parse(localStorage.getItem("quizhub_user"));
 
 		if (user && user.username) {
 			console.log("Welcome,", user.username);
-
-			// Update welcome message
 			const welcomeEls = document.getElementsByClassName("welcome-msg");
 			for (let el of welcomeEls) {
 				el.textContent = user.username;
 			}
-
-			// Update stats and activities dynamically
 			const userStats = document.getElementById("userStats");
 			userStats.innerHTML = `
 				<li class="mb-1"><span data-feather="check-circle" class="feather-sm me-1"></span> Quizzes Taken: <strong>${user.stats.quizzesTaken}</strong></li>
 				<li class="mb-1"><span data-feather="star" class="feather-sm me-1"></span> Average Score: <strong>${user.stats.averageScore}%</strong></li>
 				<li class="mb-1"><span data-feather="trending-up" class="feather-sm me-1"></span> Current Streak: <strong>${user.stats.currentStreak} days</strong></li>
 			`;
-
-			// Render recent activities
 			const recentActivities = document.getElementById("recentActivities");
 			user.recentActivities.forEach(activity => {
 				recentActivities.innerHTML += `
@@ -248,7 +244,6 @@
 				`;
 			});
 		} else {
-			// Not logged in? Redirect to login page
 			window.location.href = "login.html";
 		}
 	</script>

@@ -56,11 +56,7 @@
               </a>
             </li>
 
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="leaderboard.html">
-                <i class="align-middle" data-feather="award"></i>
-                <span class="align-middle">Leaderboard</span>
-              </a>
+          
             </li>
 
             <li class="sidebar-item">
@@ -106,7 +102,7 @@
                 >
                   <div class="dropdown-menu-header">4 New Notifications</div>
                   <div class="list-group">
-                    <a href="#" class="list-group-item">
+                    <a href="quizzes.html" class="list-group-item">
                       <div class="row g-0 align-items-center">
                         <div class="col-2">
                           <i
@@ -123,7 +119,7 @@
                         </div>
                       </div>
                     </a>
-                    <a href="#" class="list-group-item">
+                    <a  class="list-group-item">
                       <div class="row g-0 align-items-center">
                         <div class="col-2">
                           <i class="text-warning" data-feather="bell"></i>
@@ -167,7 +163,7 @@
                     Settings</a
                   >
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Log out</a>
+                  <a class="dropdown-item" href="#" id="logout-btn">Log out</a>
                 </div>
               </li>
             </ul>
@@ -176,7 +172,7 @@
 
         <main class="content">
           <div class="container-fluid p-0">
-            <h1 class="h3 mb-3"><strong>QuizHub</strong> Dashboard</h1>
+            <h1 class="h3 mb-3" style="text-align: center;"><strong>QuizHub</strong> Dashboard</h1>
 
             <div class="row">
               <div class="col-xl-6 col-xxl-5 d-flex">
@@ -195,7 +191,7 @@
                               </div>
                             </div>
                           </div>
-                          <h1 class="mt-1 mb-3">150</h1>
+                          <h1 class="mt-1 mb-3" id="total-quizzes">1000</h1>
                           <div class="mb-0">
                             <span class="text-success">
                               <i class="mdi mdi-arrow-bottom-right"></i> 5.25%
@@ -219,7 +215,7 @@
                               </div>
                             </div>
                           </div>
-                          <h1 class="mt-1 mb-3">1,234</h1>
+                          <h1 class="mt-1 mb-3" id="active-users">100+</h1>
                           <div class="mb-0">
                             <span class="text-success">
                               <i class="mdi mdi-arrow-bottom-right"></i> 3.65%
@@ -245,7 +241,7 @@
                               </div>
                             </div>
                           </div>
-                          <h1 class="mt-1 mb-3">5,678</h1>
+                          <h1 class="mt-1 mb-3" id="quizzes-taken">0</h1>
                           <div class="mb-0">
                             <span class="text-success">
                               <i class="mdi mdi-arrow-bottom-right"></i> 6.65%
@@ -270,7 +266,7 @@
                               </div>
                             </div>
                           </div>
-                          <h1 class="mt-1 mb-3">#15</h1>
+                          <h1 class="mt-1 mb-3" id="user-rank">#0</h1>
                           <div class="mb-0">
                             <span class="text-success">
                               <i class="mdi mdi-arrow-bottom-right"></i> 2.25%
@@ -286,109 +282,94 @@
 
               <div class="col-xl-6 col-xxl-7">
                 <div class="card flex-fill w-100">
-                  <div class="card-header">
-                    <h5 class="card-title mb-0">Leaderboard</h5>
-                  </div>
-                  <div class="card-body py-3">
-                    <table class="table table-hover my-0">
-                      <thead>
-                        <tr>
-                          <th>Rank</th>
-                          <th>Name</th>
-                          <th>Score</th>
-                          <th>Quizzes Taken</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>1</td>
-                          <td>Dhruv dhoundiyal</td>
-                          <td>950</td>
-                          <td>45</td>
-                        </tr>
-                        <tr>
-                          <td>2</td>
-                          <td>Jane Smith</td>
-                          <td>920</td>
-                          <td>42</td>
-                        </tr>
-                        <tr>
-                          <td>3</td>
-                          <td>Alice Johnson</td>
-                          <td>890</td>
-                          <td>40</td>
-                        </tr>
-                        <tr>
-                          <td>4</td>
-                          <td>Bob Brown</td>
-                          <td>870</td>
-                          <td>38</td>
-                        </tr>
-                        <tr>
-                          <td>5</td>
-                          <td>Charlie Davis</td>
-                          <td>850</td>
-                          <td>37</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+                 
                 </div>
               </div>
             </div>
 
-            <div class="row">
-              <div class="col-12 col-lg-8 col-xxl-9 d-flex">
-                <div class="card flex-fill">
-                  <div class="card-header">
-                    <h5 class="card-title mb-0">Recent Quizzes</h5>
-                  </div>
-                  <table class="table table-hover my-0">
-                    <thead>
-                      <tr>
-                        <th>Quiz Name</th>
-                        <th>Category</th>
-                        <th>Difficulty</th>
-                        <th>Score</th>
-                        <th>Date Taken</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>JavaScript Basics</td>
-                        <td>Programming</td>
-                        <td>Easy</td>
-                        <td>85%</td>
-                        <td>2023-10-01</td>
-                      </tr>
-                      <tr>
-                        <td>Advanced CSS</td>
-                        <td>Web Development</td>
-                        <td>Medium</td>
-                        <td>78%</td>
-                        <td>2023-09-28</td>
-                      </tr>
-                      <tr>
-                        <td>Python Fundamentals</td>
-                        <td>Programming</td>
-                        <td>Easy</td>
-                        <td>92%</td>
-                        <td>2023-09-25</td>
-                      </tr>
-                      <tr>
-                        <td>React.js Advanced</td>
-                        <td>Web Development</td>
-                        <td>Hard</td>
-                        <td>65%</td>
-                        <td>2023-09-20</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
+            
         </main>
+        <main class="content">
+          <div class="container-fluid p-0">
+              <h1 class="h3 mb-3" style="text-align: center;"><strong>QuizHub</strong> Leaderboard</h1>
+
+              <div class="row">
+                  <div class="col-12">
+                      <div class="card">
+                          <div class="card-header">
+                              <h5 class="card-title mb-0">Top 5 Players</h5>
+                          </div>
+                          <div class="card-body">
+                              <canvas id="leaderboardChart"></canvas>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="row">
+                  <div class="col-12">
+                      <div class="card">
+                          <div class="card-header">
+                              <h5 class="card-title mb-0">Global Leaderboard</h5>
+                          </div>
+                          <div class="card-body">
+                              <table class="table table-hover my-0">
+                                  <thead>
+                                      <tr>
+                                          <th>Rank</th>
+                                          <th>Name</th>
+                                          <th>Score</th>
+                                          <th>Questions Attempted</th>
+                                          <th>Quizzes Taken</th>
+                                          <th>Score percentage</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody id="leaderboard-table-body">
+                                     
+                                  </tbody>
+                              </table>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-12">
+                      <div class="card">
+                          <div class="card-header">
+                              <h5 class="card-title mb-0">Friends Leaderboard</h5>
+                          </div>
+                          <div class="card-body">
+                              <table class="table table-hover my-0">
+                                  <thead>
+                                      <tr>
+                                          <th>Rank</th>
+                                          <th>Name</th>
+                                          <th>Score</th>
+                                          <th>Quizzes Taken</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                          <td>1</td>
+                                          <td>Alice Johnson</td>
+                                          <td>890</td>
+                                          <td>40</td>
+                                      </tr>
+                                      <tr>
+                                          <td>2</td>
+                                          <td>Bob Brown</td>
+                                          <td>870</td>
+                                          <td>38</td>
+                                      </tr>
+                                  </tbody>
+                              </table>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+      </main>
 
         <footer class="footer">
           <div class="container-fluid">
@@ -447,101 +428,136 @@
     </div>
 
     <script src="js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        var ctx = document
-          .getElementById("chartjs-dashboard-line")
-          .getContext("2d");
-        var gradient = ctx.createLinearGradient(0, 0, 0, 225);
-        gradient.addColorStop(0, "rgba(215, 227, 244, 1)");
-        gradient.addColorStop(1, "rgba(215, 227, 244, 0)");
-        // Line chart
-        new Chart(document.getElementById("chartjs-dashboard-line"), {
-          type: "line",
-          data: {
-            labels: [
-              "Jan",
-              "Feb",
-              "Mar",
-              "Apr",
-              "May",
-              "Jun",
-              "Jul",
-              "Aug",
-              "Sep",
-              "Oct",
-              "Nov",
-              "Dec",
-            ],
-            datasets: [
-              {
-                label: "Quizzes Taken",
-                fill: true,
-                backgroundColor: gradient,
-                borderColor: window.theme.primary,
-                data: [
-                  2115, 1562, 1584, 1892, 1587, 1923, 2566, 2448, 2805, 3438,
-                  2917, 3327,
-                ],
-              },
-            ],
-          },
-          options: {
-            maintainAspectRatio: false,
-            legend: {
-              display: false,
-            },
-            tooltips: {
-              intersect: false,
-            },
-            hover: {
-              intersect: true,
-            },
-            plugins: {
-              filler: {
-                propagate: false,
-              },
-            },
-            scales: {
-              xAxes: [
-                {
-                  reverse: true,
-                  gridLines: {
-                    color: "rgba(0,0,0,0.0)",
-                  },
-                },
-              ],
-              yAxes: [
-                {
-                  ticks: {
-                    stepSize: 1000,
-                  },
-                  display: true,
-                  borderDash: [3, 3],
-                  gridLines: {
-                    color: "rgba(0,0,0,0.0)",
-                  },
-                },
-              ],
-            },
-          },
+        const user = JSON.parse(localStorage.getItem("quizhub_user"));
+        document.getElementById("logout-btn").addEventListener("click", function (e) {
+          e.preventDefault(); 
+          localStorage.removeItem("quizhub_user");
+          window.location.href = "loginpage.html";
         });
-      });
-      const user = JSON.parse(localStorage.getItem("quizhub_user"));
-
-      if (user && user.username) {
-        console.log("Welcome,", user.username);
-
-        // Example: Display it somewhere on the page
-        const welcomeEl = document.getElementById("welcome-msg");
-        if (welcomeEl) {
-          welcomeEl.textContent = `${user.username}`;
+        if (user && user.username) {
+          console.log("Welcome,", user.username);
+          document.getElementById("welcome-msg").textContent = user.username;
+        } else {
+          window.location.href = "loginpage.html";
+          return;
         }
-      } else {
-        // Not logged in? Redirect to login page
-        window.location.href = "login.html";
-      }
+    
+        document.getElementById("logout-btn").addEventListener("click", function () {
+          localStorage.removeItem("quizhub_user");
+          window.location.href = "loginpage.html";
+        });
+    
+       
+        }
+    
+      );
     </script>
+    
+    <script>
+      document.addEventListener("DOMContentLoaded", async function () {
+          try {
+              console.log("Fetching leaderboard data...");
+              
+              const response = await fetch('http://localhost:8080/api/leaderboard');
+              
+              if (!response.ok) {
+                  throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+              const players = await response.json();
+              console.log("Received players:", players);
+              
+              if (!Array.isArray(players)) {
+                  throw new Error("Expected an array of players");
+              }
+      
+              const tableBody = document.getElementById("leaderboard-table-body");
+              tableBody.innerHTML = "";
+              
+              players.forEach((player, index) => {
+                  const row = `
+                      <tr>
+                          <td>${index + 1}</td>
+                          <td>${player.name || 'Anonymous'}</td>
+                          <td>${player.score || 0}</td>
+                          <td>${player.quizzes || 0}</td>
+                          <td>${player.totalQuizzesAttempted || 0}</td>
+                          <td>${player.percentage || 0}%</td>
+                      </tr>
+                  `;
+                  tableBody.innerHTML += row;
+              });
+      
+              if (players.length > 0) {
+                  const top5 = players.slice(0, 5);
+                  const ctx = document.getElementById("leaderboardChart").getContext("2d");
+                  
+                  new Chart(ctx, {
+                      type: "bar",
+                      data: {
+                          labels: top5.map(p => p.name || 'Anonymous'),
+                          datasets: [{
+                              label: "Score",
+                              data: top5.map(p => p.score || 0),
+                              backgroundColor: [
+                                  "rgba(52, 152, 219, 0.7)",
+                                  "rgba(26, 188, 156, 0.7)",
+                                  "rgba(243, 156, 18, 0.7)", 
+                                  "rgba(231, 76, 60, 0.7)",
+                                  "rgba(155, 89, 182, 0.7)"
+                              ],
+                              borderColor: "#2c3e50",
+                              borderWidth: 1
+                          }]
+                      },
+                      options: {
+                          responsive: true,
+                          plugins: {
+                              tooltip: {
+                                  callbacks: {
+                                      label: (context) => {
+                                          const player = top5[context.dataIndex];
+                                          return [
+                                              `Score: ${player.score || 0}`,
+                                              `Quizzes: ${player.quizzes || 0}`,
+                                              `Attempts: ${player.totalQuizzesAttempted || 0}`,
+                                              `Accuracy: ${player.percentage || 0}%`
+                                          ].join('\n');
+                                      }
+                                  }
+                              }
+                          },
+                          scales: {
+                              y: {
+                                  beginAtZero: true
+                              }
+                          }
+                      }
+                  });
+              }
+              const user = JSON.parse(localStorage.getItem("quizhub_user"));
+              if (user && user.username) {
+                  document.getElementById("welcome-msg").textContent = user.username;
+              } else {
+                  window.location.href = "loginpage.html";
+              }
+              
+          } catch (error) {
+              console.error("Leaderboard error:", error);
+              const tableBody = document.getElementById("leaderboard-table-body");
+              tableBody.innerHTML = `
+                  <tr>
+                      <td colspan="6" class="text-center text-danger">
+                          Error loading leaderboard: ${error.message}
+                      </td>
+                  </tr>
+              `;
+          }
+      });
+      </script>
   </body>
 </html>
