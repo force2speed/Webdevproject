@@ -20,7 +20,8 @@ cd Webdevproject/quizhub-backend
 npm install --production
 
 # Set environment variables
-cat > .env <<EOF
+cat > config.env <<EOF
+
 PORT=8081
 NODE_ENV=production
 MONGODB_URI=mongodb+srv://dhruvdhoundiyal:XtNVFubmzJkaMFMy@quizhubcluster.k7gwuyt.mongodb.net/QUIZHUB?retryWrites=true&w=majority&appName=QUIZHUBCLUSTER

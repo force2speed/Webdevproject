@@ -42,6 +42,8 @@ app.get('/api/healthcheck', (req, res) => {
 app.get('/health', (req, res) => {
   res.status(200).send('OK');
 });
+console.log('PORT:', process.env.PORT);
+console.log('MONGO:', process.env.MONGODB_URI);
 // Server start
 const PORT = process.env.PORT || 8081;
 app.listen(PORT, () => {
