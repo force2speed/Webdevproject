@@ -6,7 +6,7 @@ module.exports = {
         env: {
           PORT: 8081,
           NODE_ENV: "production",
-          MONGODB_URI: "mongodb+srv://dhruvdhoundiyal:XtNVFubmzJkaMFMy@quizhubcluster.k7gwuyt.mongodb.net/QUIZHUB?retryWrites=true&w=majority&appName=QUIZHUBCLUSTER"
+          MONGODB_URI: "mongodb://dhruvdhoundiyal:XtNVFubmzJkaMFMy@quizhubcluster.k7gwuyt.mongodb.net:27017/QUIZHUB?retryWrites=true&w=majority"
         }
       }
     ]
