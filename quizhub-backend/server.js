@@ -7,7 +7,12 @@ const leaderboardRoutes = require('./routes/leaderboard');
 const path = require('path');
 
 dotenv.config({ path: path.resolve(__dirname, 'config.env') });
+const yargs = require('yargs/yargs');
+const { hideBin } = require('yargs/helpers');
+const argv = yargs(hideBin(process.argv)).argv;
 
+// Modify your PORT definition:
+const PORT = argv.port || process.env.PORT || 8081;
 const app = express();
 
 // Middlewares
@@ -33,7 +38,7 @@ app.get('/api/healthcheck', (req, res) => res.status(200).json({ status: 'health
 app.get('/health', (req, res) => res.status(200).send('OK'));
 
 // Server start with robust error handling
-const PORT = process.env.PORT || 8081;
+
 const HOST = '0.0.0.0';
 
 const server = app.listen(PORT, HOST, () => {
