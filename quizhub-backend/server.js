@@ -5,6 +5,7 @@ const cors = require('cors');
 const authController = require('./controllers/authController');
 const leaderboardRoutes = require('./routes/leaderboard');
 
+
 // Load .env variables
 dotenv.config({ path: './config.env' });
 
@@ -12,10 +13,11 @@ const app = express();
 
 // Middlewares
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: '*', // Allow all origins (for testing), or use your actual bucket URL
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type'],
 }));
+
 app.use(express.json());
 
 // Connect to MongoDB
@@ -34,5 +36,6 @@ app.use('/api/leaderboard', leaderboardRoutes);
 // Server start
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
+
 });

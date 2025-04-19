@@ -1,20 +1,22 @@
-# Use the official Node.js 18 image as the base image
-FROM node:18
+FROM node:18-alpine
 
-# Set the working directory inside the container
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
+# Copy package files first for better caching
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Install ALL dependencies (including devDependencies for Cloud Run)
+RUN npm install --include=dev
 
-# Copy the rest of the application code to the working directory
+# Copy all other files
 COPY . .
 
-# Expose the port your app will run on
+# Set environment variables
+ENV PORT=8080
+ENV NODE_ENV=production
+
+# Expose the correct port
 EXPOSE 8080
 
-# Start the application
-CMD ["node", "server.js"]
+# Start command
+CMD ["npm", "start"]

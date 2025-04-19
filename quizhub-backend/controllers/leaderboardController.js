@@ -60,7 +60,6 @@ exports.getLeaderboard = async (req, res) => {
   }
 };
 
-// Get user's personal best scores
 exports.getUserScores = async (req, res) => {
   try {
     const { username } = req.params;

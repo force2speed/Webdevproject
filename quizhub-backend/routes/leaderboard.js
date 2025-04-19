@@ -1,5 +1,5 @@
 const express = require('express');
-const Leaderboard = require('../models/leaderboard');
+const Leaderboard = require('../models/Leaderboard');
 const router = express.Router();
 
 // Handle score submissions
@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
                 score: userRecord.score + score,
                 quizzes: userRecord.quizzes + quizzes,
                 perfectQuiz: userRecord.perfectQuiz || perfectQuiz,
-                percentage: (int)(userRecord.score/userRecord.quizzes)*100,
+                percentage: (userRecord.score/userRecord.quizzes)*100,
                 totalQuizzesAttempted: userRecord.totalQuizzesAttempted
             });
             
