@@ -32,6 +32,9 @@ mongoose.connect(process.env.MONGODB_URI, {
 app.post('/api/signup', authController.signup);
 app.post('/api/login', authController.login);
 app.use('/api/leaderboard', leaderboardRoutes);
+app.get('/', (req, res) => {
+  res.status(200).send('OK');
+});
 
 // Server start
 const PORT = process.env.PORT || 80;
