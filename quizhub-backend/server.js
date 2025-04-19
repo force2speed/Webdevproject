@@ -39,8 +39,11 @@ app.get('/api/healthcheck', (req, res) => {
   res.status(200).json({ status: 'healthy' });
 });
 
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
 // Server start
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8081;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 
