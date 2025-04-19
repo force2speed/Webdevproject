@@ -21,7 +21,6 @@ npm install --production
 
 # Set environment variables
 cat > config.env <<EOF
-
 PORT=8081
 NODE_ENV=production
 MONGODB_URI=mongodb+srv://dhruvdhoundiyal:XtNVFubmzJkaMFMy@quizhubcluster.k7gwuyt.mongodb.net/QUIZHUB?retryWrites=true&w=majority&appName=QUIZHUBCLUSTER
