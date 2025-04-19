@@ -1,37 +1,23 @@
 #!/bin/bash
-# Exit immediately if any command fails
-set -e
-
-# Update and install necessary packages
-sudo apt-get update -y
-sudo apt-get install -y nodejs npm git
-
-# Install latest Node.js if needed
-curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-sudo apt-get install -y nodejs
-
-# Clone the repository
-git clone https://github.com/force2speed/Webdevproject.git
-
-# Navigate to the backend folder
-cd Webdevproject/quizhub-backend
+set -e  # Exit on error
 
 # Install dependencies
-npm install --production
+sudo apt update
+sudo apt install -y git nodejs npm
 
-# Set environment variables
-cat > config.env <<EOF
-PORT=8081
-NODE_ENV=production
-MONGODB_URI=mongodb+srv://dhruvdhoundiyal:XtNVFubmzJkaMFMy@quizhubcluster.k7gwuyt.mongodb.net/QUIZHUB?retryWrites=true&w=majority&appName=QUIZHUBCLUSTER
-EOF
+# Fix permissions (critical!)
+sudo chown -R $(whoami):$(whoami) /Webdevproject/
 
-# Install PM2 globally
-sudo npm install -g pm2
+# Navigate to backend
+cd /Webdevproject/quizhub-backend
 
-# Start the application
-pm2 start server.js --name "quizhub-backend"
+# Install dependencies
+npm install
 
-# Configure PM2 to start on system boot
-sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u $USER --hp /home/$USER
+# Start application
+PORT=8081 pm2 start server.js --name quizhub-backend
 pm2 save
+
+# Ensure pm2 starts on reboot
+pm2 startup
+sudo env PATH=$PATH:/usr/bin pm2 startup systemd -u $(whoami) --hp /home/$(whoami)
