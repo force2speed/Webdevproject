@@ -5,9 +5,9 @@ const cors = require('cors');
 const authController = require('./controllers/authController');
 const leaderboardRoutes = require('./routes/leaderboard');
 
+const path = require('path');
+dotenv.config({ path: path.resolve(__dirname, 'config.env') });
 
-// Load .env variables
-dotenv.config({ path: './config.env' });
 
 const app = express();
 
