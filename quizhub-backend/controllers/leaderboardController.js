@@ -1,5 +1,5 @@
 // controllers/leaderboardController.js
-const Leaderboard = require('../models/leaderboard');
+const Leaderboard = require('../models/Leaderboard');
 
 // Submit score to leaderboard
 exports.submitScore = async (req, res) => {
