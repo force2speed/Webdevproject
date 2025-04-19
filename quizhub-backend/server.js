@@ -35,6 +35,9 @@ app.use('/api/leaderboard', leaderboardRoutes);
 app.get('/', (req, res) => {
   res.status(200).send('OK');
 });
+app.get('/api/healthcheck', (req, res) => {
+  res.status(200).json({ status: 'healthy' });
+});
 
 // Server start
 const PORT = process.env.PORT || 8080;
