@@ -1,27 +1,49 @@
 #!/bin/bash
-set -e  # Exit on error
+set -ex
 
-# Install Node.js and npm
-sudo apt update
-sudo apt install -y git nodejs npm
+# Install Node.js
+curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+sudo apt-get install -y nodejs
+sudo apt-get install -y git
 
-# Install PM2 globally
-sudo npm install -g pm2
+# Create app directory
+APP_DIR="/home/$(whoami)/quizhub-backend"
+mkdir -p "$APP_DIR"
+cd "$APP_DIR"
 
-# Ensure PM2 is in PATH
-echo 'export PATH=$PATH:/usr/local/bin' >> ~/.bashrc
-source ~/.bashrc
-
-# Navigate to app directory
-cd /Webdevproject/quizhub-backend
-
-# Install app dependencies
+# ----------------------------
+# METHOD 1: Clone from GitHub (Recommended)
+# ----------------------------
+git clone https://github.com/yourusername/quizhub-backend.git .
 npm install
 
-# Start application
-PORT=8081 pm2 start server.js --name quizhub-backend
-pm2 save
+# ----------------------------
+# OR METHOD 2: Copy from local machine using gcloud
+# (Run this from your local machine first)
+# ----------------------------
+# gcloud compute instances add-metadata INSTANCE_NAME \
+#   --metadata-from-file quizhub-backend=./quizhub-backend \
+#   --zone=asia-south1-a
 
-# Configure PM2 to start on boot
-pm2 startup
-sudo env PATH=$PATH:/usr/bin pm2 startup systemd -u $(whoami) --hp /home/$(whoami)
+# Then in startup script:
+# sudo cp -r /quizhub-backend "$APP_DIR"
+# cd "$APP_DIR"
+# npm install
+
+# Set environment variables
+if [ -f "config.env" ]; then
+  cp config.env .env
+fi
+
+# Start the application
+nohup node server.js --port 8081 > app.log 2>&1 &
+
+# Verify application started
+sleep 5
+if ! pgrep -f "node server.js --port 8081" > /dev/null; then
+  echo "Application failed to start!"
+  cat app.log
+  exit 1
+fi
+
+echo "Application started successfully on port 8081"
