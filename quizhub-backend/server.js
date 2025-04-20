@@ -7,7 +7,9 @@ const leaderboardRoutes = require('./routes/leaderboard');
 
 // Load .env variables
 dotenv.config({ path: './config.env' });
-
+dotenv.config({ path: './config.env' });
+console.log('MONGODB_URI:', process.env.MONGODB_URI);  // Should print your MongoDB URI
+console.log('PORT:', process.env.PORT);  // Should print 8081 or any value from config.envs
 const app = express();
 
 // Middlewares
