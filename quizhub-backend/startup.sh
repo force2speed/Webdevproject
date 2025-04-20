@@ -6,9 +6,7 @@ curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
 sudo apt-get install -y nodejs git
 
 # Clone repository
-APP_DIR="/home/$(whoami)/quizhub-backend"
-git clone  https://github.com/force2speed/Webdevproject.git $APP_DIR
-cd $APP_DIR
+
 
 # Install dependencies
 npm install
