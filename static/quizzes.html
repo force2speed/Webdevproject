@@ -759,7 +759,7 @@
         async function submitScoreToServer(name, score, quizzes, perfectQuiz) {
             const messageElement = document.getElementById('submitMessage');
             try {
-                const response = await fetch('https://quizhub-backend-766393477155.asia-south1.run.app/api/leaderboard', {
+                const response = await fetch('http://34.54.27.26/api/leaderboard', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
