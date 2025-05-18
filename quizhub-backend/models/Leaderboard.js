@@ -23,11 +23,13 @@ const leaderboardSchema = new mongoose.Schema({
     default: false
   },
   percentage: {
-    type: Number,
-    required: true,
-    min: 0,
-    max: 100
-  },
+  type: Number,
+  required: true,
+  min: 0,
+  max: 100,
+  set: v => Math.round(v * 100) / 100  // rounds to 2 decimals
+}
+,
   totalQuizzesAttempted: {  // NEW FIELD
     type: Number,
     required: true,
