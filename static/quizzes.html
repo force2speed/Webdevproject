@@ -371,7 +371,6 @@
                                     <span>Time Remaining:</span>
                                     <span id="timer">00:00</span>
                                 </div>
-                                <button id="submitQuiz">Submit Quiz</button>
                             </div>
                         </div>
                         
@@ -391,6 +390,7 @@
                         <div id="submitMessage" class="mt-3"></div>
                     </div>
                 </div>
+                <button id="submitQuiz">Submit Quiz</button>
             </main>
 
             <footer class="footer">
@@ -552,7 +552,6 @@
             document.getElementById('submitMessage').textContent = '';
             quizHeader.style.display = 'block';
             submitQuizBtn.style.display = 'inline-block';
-            submitQuizBtn.disabled = true;
         
             startTimer(totalQuizTime);
             fetchQuizQuestions(categoryId, totalQuestions, difficulty);
@@ -628,63 +627,86 @@
             const answeredCount = Object.keys(userAnswers).length;
             const progress = (answeredCount / totalQuestions) * 100;
             progressBar.style.width = `${progress}%`;
-            submitQuizBtn.disabled = answeredCount < totalQuestions;
         }
 
         function submitQuiz() {
-            let baseScore = 0;
-            let perfectQuiz = true;
-         
+    // First check if any questions are answered at all
+    const answeredCount = Object.keys(userAnswers).length;
+    if (answeredCount === 0) {
+        showAlert("Please answer at least one question before submitting!");
+        return;
+    }
+
+    // Optionally: Confirm if user wants to submit with unanswered questions
+    
+    let baseScore = 0;
+    let perfectQuiz = true;
+    
+    // Calculate scores
+    quizQuestions.forEach((question, index) => {
+        if (userAnswers[index]) {
+            const isCorrect = userAnswers[index].correct;
+            const points = POINTS_SYSTEM[question.difficulty] || 1;
             
-            quizQuestions.forEach((question, index) => {
-                const isCorrect = userAnswers[index]?.correct || false;
-                const points = POINTS_SYSTEM[question.difficulty] || 1;
-                
-                if (isCorrect) {
-                    baseScore += points;
-                } else {
-                    perfectQuiz = false;
-                }
-                
-            
-            });
-            let bonusScore = 0;
-            if (perfectQuiz) {
-                bonusScore = baseScore * (PERFECT_QUIZ_BONUS_MULTIPLIER - 1); 
-                document.getElementById('bonusContainer').style.display = 'block';
+            if (isCorrect) {
+                baseScore += points;
             } else {
-                document.getElementById('bonusContainer').style.display = 'none';
+                perfectQuiz = false;
             }
-            
-            const totalScore = baseScore + bonusScore;
-            document.getElementById('correctCount').textContent = Object.values(userAnswers).filter(a => a.correct).length;
-            document.getElementById('totalQuestions').textContent = totalQuestions;
-            document.getElementById('baseScore').textContent = baseScore;
-            document.getElementById('bonusScore').textContent = bonusScore;
-            document.getElementById('totalScore').textContent = totalScore;
-            document.getElementById('score').style.display = 'block';
-            document.querySelectorAll('.question').forEach((question, index) => {
-                const buttons = question.querySelectorAll('.answer-btn');
-                const correctAnswer = quizQuestions[index].correct_answer;
-                
-                buttons.forEach(btn => {
-                    btn.disabled = true;
-                    if (decodeHtmlEntities(btn.innerText) === decodeHtmlEntities(correctAnswer)) {
-                        btn.classList.add('correct');
-                    } else if (btn.classList.contains('selected')) {
-                        btn.classList.add('incorrect');
-                    }
-                });
-            });
-            
-            document.getElementById('retryQuiz').style.display = 'block';
-            submitQuizBtn.style.display = 'none';
-            endQuiz();
-            const userName = localStorage.getItem('quizhub_user') 
-                ? JSON.parse(localStorage.getItem('quizhub_user')).username 
-                : "Anonymous";
-            submitScoreToServer(userName, totalScore, totalQuestions, perfectQuiz);
+        } else {
+            perfectQuiz = false;
         }
+    });
+    
+    
+    // Calculate bonus
+    let bonusScore = 0;
+    if (perfectQuiz && answeredCount === totalQuestions) {
+        bonusScore = baseScore * (PERFECT_QUIZ_BONUS_MULTIPLIER - 1);
+        document.getElementById('bonusContainer').style.display = 'block';
+    } else {
+        document.getElementById('bonusContainer').style.display = 'none';
+    }
+    
+    // Update UI
+    const totalScore = baseScore + bonusScore;
+    document.getElementById('correctCount').textContent = Object.values(userAnswers).filter(a => a.correct).length;
+    document.getElementById('totalQuestions').textContent = totalQuestions; // Show total possible
+    document.getElementById('baseScore').textContent = baseScore;
+    document.getElementById('bonusScore').textContent = bonusScore;
+    document.getElementById('totalScore').textContent = totalScore;
+    document.getElementById('score').style.display = 'block';
+    
+    // Highlight answers
+    document.querySelectorAll('.question').forEach((question, index) => {
+        const buttons = question.querySelectorAll('.answer-btn');
+        const correctAnswer = quizQuestions[index].correct_answer;
+        
+        buttons.forEach(btn => {
+            btn.disabled = true;
+            if (decodeHtmlEntities(btn.innerText) === decodeHtmlEntities(correctAnswer)) {
+                btn.classList.add('correct');
+            } else if (btn.classList.contains('selected')) {
+                btn.classList.add('incorrect');
+            }
+            // Highlight unanswered questions
+            if (!userAnswers[index]) {
+                question.style.borderLeft = '3px solid #ffc107';
+            }
+        });
+    });
+    
+    // Update UI elements
+    document.getElementById('retryQuiz').style.display = 'block';
+    submitQuizBtn.style.display = 'none';
+    endQuiz();
+    
+    // Submit to server
+    const userName = localStorage.getItem('quizhub_user') 
+        ? JSON.parse(localStorage.getItem('quizhub_user')).username 
+        : "Anonymous";
+    submitScoreToServer(userName, totalScore, totalQuestions, perfectQuiz && answeredCount === totalQuestions);
+}
         function startTimer(durationInSeconds) {
             clearInterval(timerInterval);
             timeLeft = durationInSeconds;
@@ -759,7 +781,7 @@
         async function submitScoreToServer(name, score, quizzes, perfectQuiz) {
             const messageElement = document.getElementById('submitMessage');
             try {
-                const response = await fetch('http://34.54.27.26/api/leaderboard', {
+                const response = await fetch('https://quizhub-backend-fm4d.onrender.com/leaderboard', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

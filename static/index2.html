@@ -468,7 +468,7 @@
     
         async function fetchDashboardData() {
           try {
-            const leaderboardResponse = await fetch('http://34.54.27.26/api/leaderboard');
+            const leaderboardResponse = await fetch('https://quizhub-backend-fm4d.onrender.com/leaderboard');
             if (!leaderboardResponse.ok) throw new Error(`Error: ${leaderboardResponse.status}`);
             const leaderboardData = await leaderboardResponse.json();
     
@@ -512,7 +512,7 @@
           try {
               console.log("Fetching leaderboard data...");
               
-              const response = await fetch('http://34.54.27.26/api/leaderboard');
+              const response = await fetch('https://quizhub-backend-fm4d.onrender.com/leaderboard');
               
               if (!response.ok) {
                   throw new Error(`HTTP error! Status: ${response.status}`);
